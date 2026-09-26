@@ -1,56 +1,1357 @@
-<section class="screen" id="screen-form">
-  <div class="q-title">
-    Fast geschafft — wohin dürfen wir dein Ergebnis schicken?
-  </div>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dein innerer Antrieb – Gesundheits-Check</title>
 
-  <p style="color:var(--ink-dim); font-size:15px; margin-top:-10px;">
-    Du bekommst hier sofort deinen Antriebs-Typ angezeigt und zusätzlich per E-Mail.
-  </p>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <div class="form-block">
+<style>
+  :root {
+    --bg: #fefcf8;
+    --bg-2: #f5f2ea;
+    --card: #ffffff;
+    --ink: #1b2b45;
+    --ink-dim: #6b7484;
+    --sage: #2f9bb3;
+    --gold: #f2b134;
+    --line: rgba(27,43,69,0.12);
 
-    <div class="field">
-      <label for="fName">Vorname</label>
-      <input
-        type="text"
-        id="fName"
-        placeholder="Dein Vorname"
-        autocomplete="given-name"
-      >
-    </div>
+    --t-gesundheit: #e0574a;
+    --t-ambition: #2f9bb3;
+    --t-ruhe: #6f8fc9;
+    --t-gemeinschaft: #e0824a;
+    --t-optimierer: #1b2b45;
 
-    <div class="field">
-      <label for="fEmail">E-Mail</label>
-      <input
-        type="email"
-        id="fEmail"
-        placeholder="du@beispiel.ch"
-        autocomplete="email"
-      >
-    </div>
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    box-sizing: border-box;
+  }
 
-    <div class="field">
-      <label for="fPhone">Telefonnummer</label>
-      <input
-        type="tel"
-        id="fPhone"
-        placeholder="+41 79 000 00 00"
-        autocomplete="tel"
-      >
-    </div>
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17233a;
+      --bg-2: #1f2f4a;
+      --card: #22314d;
+      --ink: #fdfaf3;
+      --ink-dim: #b7c0d4;
+      --line: rgba(253,250,243,0.14);
+    }
+  }
 
-  </div>
+  :root[data-theme="dark"] {
+    --bg: #17233a;
+    --bg-2: #1f2f4a;
+    --card: #22314d;
+    --ink: #fdfaf3;
+    --ink-dim: #b7c0d4;
+    --line: rgba(253,250,243,0.14);
+  }
 
-  <button
-    class="btn-primary"
-    id="submitBtn"
-    onclick="submitForm()"
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  body {
+    margin: 0;
+    min-height: 100%;
+    background:
+      radial-gradient(
+        ellipse 900px 500px at 15% -10%,
+        rgba(47,155,179,0.10),
+        transparent 60%
+      ),
+      radial-gradient(
+        ellipse 700px 500px at 100% 10%,
+        rgba(224,130,74,0.10),
+        transparent 55%
+      ),
+      var(--bg);
+    color: var(--ink);
+    font-family: 'Work Sans', -apple-system, sans-serif;
+    line-height: 1.55;
+  }
+
+  .wrap {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: 'Fredoka', 'Work Sans', sans-serif;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  /* ---------- Progress ---------- */
+
+  .progress-track {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+    height: 3px;
+    background: var(--line);
+    margin-bottom: 40px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sage), var(--gold));
+    width: 0%;
+    transition: width .4s ease;
+  }
+
+  /* ---------- Screens ---------- */
+
+  .screen {
+    display: none;
+    animation: rise .5s ease both;
+  }
+
+  .screen.active {
+    display: block;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ---------- Hero ---------- */
+
+  .eyebrow-leaf {
+    font-size: 28px;
+    margin-bottom: 18px;
+    display: block;
+  }
+
+  .hero h1 {
+    font-size: clamp(32px, 7vw, 44px);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+  }
+
+  .hero .sub {
+    color: var(--ink-dim);
+    font-size: 17px;
+    margin-top: 18px;
+    max-width: 46ch;
+  }
+
+  .hero .meta {
+    margin-top: 28px;
+    padding: 16px 18px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-size: 14.5px;
+    color: var(--ink-dim);
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+
+  .hero .meta strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ---------- Buttons ---------- */
+
+  .btn-primary {
+    appearance: none;
+    border: none;
+    cursor: pointer;
+    background: var(--gold);
+    color: #23180a;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 16.5px;
+    padding: 15px 30px;
+    border-radius: 999px;
+    margin-top: 32px;
+    box-shadow:
+      0 6px 0 #c68a12,
+      0 10px 18px rgba(242,177,52,0.28);
+    transition:
+      transform .15s ease,
+      box-shadow .15s ease;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn-primary:active {
+    transform: translateY(2px);
+    box-shadow:
+      0 3px 0 #c68a12,
+      0 6px 12px rgba(242,177,52,0.25);
+  }
+
+  .btn-primary:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-text {
+    appearance: none;
+    background: none;
+    border: none;
+    color: var(--ink-dim);
+    font-family: 'Work Sans', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 14px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    padding: 4px 0;
+  }
+
+  .btn-text:hover {
+    color: var(--ink);
+  }
+
+  /* ---------- Question ---------- */
+
+  .q-count {
+    color: var(--ink-dim);
+    font-size: 13.5px;
+    margin-bottom: 10px;
+  }
+
+  .q-title {
+    font-size: clamp(22px, 5vw, 27px);
+    line-height: 1.28;
+    margin-bottom: 24px;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option {
+    text-align: left;
+    background: var(--card);
+    border: 2px solid var(--line);
+    color: var(--ink);
+    font-family: 'Work Sans', sans-serif;
+    font-size: 15.5px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    box-shadow: 0 2px 0 rgba(27,43,69,0.06);
+    cursor: pointer;
+    transition:
+      border-color .15s ease,
+      transform .1s ease;
+  }
+
+  .option:hover {
+    border-color: var(--sage);
+    transform: translateY(-1px);
+  }
+
+  .option.selected {
+    border-color: var(--gold);
+    background: rgba(242,177,52,0.10);
+  }
+
+  /* ---------- Result ---------- */
+
+  .result-icon {
+    font-size: 44px;
+  }
+
+  .result-kicker {
+    color: var(--result-color, var(--gold));
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    margin-top: 14px;
+  }
+
+  .result-title {
+    font-size: clamp(30px, 7vw, 40px);
+    margin-top: 6px;
+    line-height: 1.15;
+  }
+
+  .result-line {
+    font-size: 17px;
+    color: var(--ink-dim);
+    margin-top: 16px;
+    max-width: 48ch;
+  }
+
+  .result-card {
+    margin-top: 26px;
+    padding: 20px;
+    border-radius: 16px;
+    background: var(--card);
+    border: 2px solid var(--line);
+    border-left: 4px solid var(--result-color, var(--gold));
+    box-shadow: 0 2px 0 rgba(27,43,69,0.05);
+  }
+
+  .result-card p {
+    margin: 0;
+    font-size: 15px;
+    color: var(--ink-dim);
+  }
+
+  /* ---------- Form ---------- */
+
+  .form-block {
+    margin-top: 30px;
+  }
+
+  .field {
+    margin-bottom: 14px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 13.5px;
+    color: var(--ink-dim);
+    margin-bottom: 6px;
+  }
+
+  .field input {
+    width: 100%;
+    background: var(--card);
+    border: 2px solid var(--line);
+    color: var(--ink);
+    font-family: 'Work Sans', sans-serif;
+    font-size: 15.5px;
+    padding: 13px 14px;
+    border-radius: 12px;
+    outline: none;
+  }
+
+  .field input:focus {
+    border-color: var(--sage);
+  }
+
+  .fine-print {
+    font-size: 12.5px;
+    color: var(--ink-dim);
+    margin-top: 14px;
+    opacity: .8;
+  }
+
+  a {
+    color: var(--sage);
+  }
+
+  ::selection {
+    background: var(--gold);
+    color: #23180a;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div
+    class="progress-track"
+    id="progressTrack"
+    style="display:none;"
   >
-    Mein Ergebnis anzeigen
-  </button>
+    <div
+      class="progress-fill"
+      id="progressFill"
+    ></div>
+  </div>
 
-  <p class="fine-print">
-    Deine Angaben nutzen wir ausschließlich, um dir dein Ergebnis
-    und passende Infos zu Bewegung, Ernährung und Wohlbefinden zuzuschicken.
-  </p>
-</section>
+  <!-- SCREEN 0: HERO -->
+
+  <section class="screen active" id="screen-hero">
+
+    <span class="eyebrow-leaf">🌿</span>
+
+    <h1>
+      Welcher Typ bist du, wenn's um deine Gesundheit geht?
+    </h1>
+
+    <p class="sub">
+      Manche brauchen ein klares Ziel. Manche eine Gruppe, die mitzieht.
+      Manche einfach mehr Ruhe. In 2 Minuten findest du heraus, was dich
+      wirklich antreibt – und was dir bisher im Weg steht.
+    </p>
+
+    <div class="meta">
+      <span>⏱️ <strong>2 Minuten, 9 Fragen</strong></span>
+      <span>·</span>
+      <span>Kostenlos & unverbindlich</span>
+    </div>
+
+    <button
+      class="btn-primary"
+      onclick="goTo('q0')"
+    >
+      Meinen Typ herausfinden
+    </button>
+
+  </section>
+
+
+  <!-- QUESTIONS -->
+
+  <div id="quiz-questions"></div>
+
+
+  <!-- SCREEN: LEAD FORM -->
+
+  <section class="screen" id="screen-form">
+
+    <div class="q-title">
+      Fast geschafft — wohin dürfen wir dein Ergebnis schicken?
+    </div>
+
+    <p
+      style="color:var(--ink-dim); font-size:15px; margin-top:-10px;"
+    >
+      Du bekommst deinen Antriebs-Typ sofort hier angezeigt und zusätzlich
+      per E-Mail.
+    </p>
+
+    <div class="form-block">
+
+      <div class="field">
+        <label for="fName">
+          Vorname
+        </label>
+
+        <input
+          type="text"
+          id="fName"
+          placeholder="Dein Vorname"
+          autocomplete="given-name"
+          required
+        >
+      </div>
+
+
+      <div class="field">
+        <label for="fEmail">
+          E-Mail
+        </label>
+
+        <input
+          type="email"
+          id="fEmail"
+          placeholder="du@beispiel.ch"
+          autocomplete="email"
+          required
+        >
+      </div>
+
+
+      <div class="field">
+        <label for="fPhone">
+          Telefonnummer
+        </label>
+
+        <input
+          type="tel"
+          id="fPhone"
+          placeholder="+41 79 000 00 00"
+          autocomplete="tel"
+          required
+        >
+      </div>
+
+    </div>
+
+
+    <button
+      class="btn-primary"
+      id="submitBtn"
+      onclick="submitForm()"
+    >
+      Mein Ergebnis anzeigen
+    </button>
+
+    <p class="fine-print">
+      Deine Angaben nutzen wir ausschließlich, um dir dein Ergebnis
+      und passende Infos zu Bewegung, Ernährung und Wohlbefinden
+      zuzuschicken.
+    </p>
+
+  </section>
+
+
+  <!-- SCREEN: RESULT -->
+
+  <section class="screen" id="screen-result">
+
+    <div
+      class="result-icon"
+      id="resultIcon"
+    >
+      ✨
+    </div>
+
+    <div
+      class="result-kicker"
+      id="resultKicker"
+    >
+      DEIN ANTRIEBS-TYP
+    </div>
+
+    <h2
+      class="result-title"
+      id="resultTitle"
+    >
+      —
+    </h2>
+
+    <p
+      class="result-line"
+      id="resultLine"
+    >
+      —
+    </p>
+
+    <div class="result-card">
+      <p id="resultBody">
+        —
+      </p>
+    </div>
+
+    <p
+      class="result-line"
+      id="levelLine"
+      style="font-size:15px; margin-top:16px;"
+    >
+      —
+    </p>
+
+    <p
+      class="fine-print"
+      id="resultNote"
+    >
+      Wir melden uns danach persönlich bei dir, um gemeinsam zu schauen,
+      was am besten zu dir passt.
+    </p>
+
+  </section>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   DATA
+   ========================================================= */
+
+const TYPES = {
+
+  gesundheit: {
+    icon: '❤️',
+    kicker: 'DEIN ANTRIEBS-TYP',
+    title: 'Gesundheitsbewusst',
+    color: 'var(--t-gesundheit)',
+    line: 'Dein Antrieb ist dein Körpergefühl. Du merkst sofort, wenn dir etwas guttut – und genau das ist deine größte Stärke.',
+    body: 'Für dich zählt nicht die schnelle Veränderung, sondern das nachhaltige Gefühl von Wohlbefinden. Kleine, spürbare Verbesserungen im Alltag motivieren dich mehr als große Versprechen.'
+  },
+
+  ambition: {
+    icon: '💪',
+    kicker: 'DEIN ANTRIEBS-TYP',
+    title: 'Ambitioniert',
+    color: 'var(--t-ambition)',
+    line: 'Du brauchst ein klares Ziel und den Beweis, dass du es durchziehen kannst. Sobald du dir etwas vornimmst, willst du es auch schaffen.',
+    body: 'Struktur, messbare Fortschritte und ein sichtbares Ergebnis am Ende des Monats sind für dich der stärkste Antrieb. Ein klarer Plan hilft dir mehr als vage Motivation.'
+  },
+
+  ruhe: {
+    icon: '😌',
+    kicker: 'DEIN ANTRIEBS-TYP',
+    title: 'Ruhesuchend',
+    color: 'var(--t-ruhe)',
+    line: 'Dein Alltag ist voll genug – du suchst vor allem eines: weniger Druck und mehr Klarheit im Kopf.',
+    body: 'Für dich geht es nicht um ein Fitness-Projekt, sondern um eine bewusste Pause vom Alltag. Kleine Rituale ohne Leistungsdruck bringen dich am weitesten.'
+  },
+
+  gemeinschaft: {
+    icon: '🤝',
+    kicker: 'DEIN ANTRIEBS-TYP',
+    title: 'Gemeinschaftsmensch',
+    color: 'var(--t-gemeinschaft)',
+    line: 'Allein durchzuziehen ist nicht dein Ding – du wächst mit Menschen um dich herum, die dasselbe vorhaben.',
+    body: 'Austausch, gegenseitige Motivation und das Gefühl, nicht allein zu sein, sind für dich der Schlüssel. In einer Gruppe hältst du deutlich länger durch als im Alleingang.'
+  },
+
+  optimierer: {
+    icon: '✨',
+    kicker: 'DEIN ANTRIEBS-TYP',
+    title: 'Selbstoptimierend',
+    color: 'var(--t-optimierer)',
+    line: 'Du bist neugierig, was in dir steckt. Veränderung ist für dich kein Muss, sondern ein spannendes Experiment mit dir selbst.',
+    body: 'Neue Routinen, kleine Selbstversuche und das Beobachten, was sich verändert, motivieren dich mehr als jedes starre Programm. Für dich ist der Oktober ein Testlauf für die beste Version von dir.'
+  }
+
+};
+
+
+/* =========================================================
+   TYPE QUESTIONS
+   ========================================================= */
+
+const TYPE_KEYS = [
+  'gesundheit',
+  'ambition',
+  'ruhe',
+  'gemeinschaft',
+  'optimierer'
+];
+
+
+const TYPE_QUESTIONS = [
+
+  {
+    title: 'Was beschäftigt dich gerade am meisten, wenn du an deine Gesundheit denkst?',
+    options: [
+      'Ich will mich wieder wohler in meiner Haut fühlen',
+      'Ich will sehen, dass ich etwas, das ich mir vornehme, auch durchziehe',
+      'Ich brauche eine Pause vom Alltagsstress',
+      'Ich mache sowas lieber mit anderen zusammen als allein',
+      'Ich bin einfach neugierig, was noch in mir steckt'
+    ]
+  },
+
+  {
+    title: 'Was motiviert dich am meisten, wenn du etwas verändern willst?',
+    options: [
+      'Das Gefühl, meinem Körper etwas Gutes zu tun',
+      'Ein klares Ziel vor Augen zu haben',
+      'Weniger Druck, mehr Ruhe im Kopf',
+      'Menschen, die das Gleiche vorhaben wie ich',
+      'Zu sehen, wozu ich eigentlich fähig bin'
+    ]
+  },
+
+  {
+    title: 'Wie sieht für dich ein richtig guter Tag aus?',
+    options: [
+      'Ich habe mich bewegt und gut gegessen',
+      'Ich habe meine To-dos abgehakt',
+      'Ich hatte Zeit für mich, ohne Hetze',
+      'Ich hatte schönen Austausch mit anderen',
+      'Ich habe etwas Neues über mich gelernt'
+    ]
+  },
+
+  {
+    title: 'Was stresst dich im Alltag am meisten?',
+    options: [
+      'Dass ich meinen Körper vernachlässige',
+      'Dass ich meine Ziele aus den Augen verliere',
+      'Dass gerade alles zu viel und zu schnell ist',
+      'Dass ich mich manchmal isoliert fühle',
+      'Dass ich das Gefühl habe, stehenzubleiben'
+    ]
+  },
+
+  {
+    title: 'Wie gehst du neue Gewohnheiten am liebsten an?',
+    options: [
+      'Schritt für Schritt, mit Fokus auf meinem Körpergefühl',
+      'Mit klarem Plan und messbaren Ergebnissen',
+      'Ganz entspannt, ohne mich unter Druck zu setzen',
+      'Am liebsten in einer Gruppe, die mich mitzieht',
+      'Ich probiere gern aus, was am besten zu mir passt'
+    ]
+  },
+
+  {
+    title: 'Was wäre für dich der größte Gewinn, wenn du gesünder lebst?',
+    options: [
+      'Mehr Energie und ein besseres Körpergefühl',
+      'Der Beweis, dass ich es durchziehen kann',
+      'Innere Ruhe und weniger Kopfkino',
+      'Neue Kontakte und ein Gefühl von Zugehörigkeit',
+      'Klarheit darüber, wer ich sein will'
+    ]
+  },
+
+  {
+    title: 'Wie gehst du mit Rückschlägen um, wenn mal etwas nicht klappt?',
+    options: [
+      'Ich achte danach einfach wieder besonders auf mein Körpergefühl',
+      'Ich sehe es als Ansporn, es beim nächsten Mal besser zu machen',
+      'Ich gönne mir erstmal eine Pause, bevor ich weitermache',
+      'Ich hole mir Rückhalt bei anderen',
+      'Ich analysiere, was ich daraus lernen kann'
+    ]
+  },
+
+  {
+    title: 'Was inspiriert dich am meisten, wenn du andere beobachtest?',
+    options: [
+      'Menschen, die sichtlich wohl in ihrem Körper sind',
+      'Menschen, die ihre Ziele konsequent verfolgen',
+      'Menschen, die entspannt und gelassen wirken',
+      'Menschen, die andere mitreißen und verbinden',
+      'Menschen, die ständig dazulernen und sich weiterentwickeln'
+    ]
+  },
+
+  {
+    title: 'Worauf wärst du am meisten stolz, wenn du in einem Jahr zurückblickst?',
+    options: [
+      'Dass ich auf meinen Körper gehört habe',
+      'Dass ich drangeblieben bin, obwohl es stellenweise hart war',
+      'Dass ich gelernt habe, öfter loszulassen',
+      'Dass ich andere unterstützt oder mitgenommen habe',
+      'Dass ich mich spürbar weiterentwickelt habe'
+    ]
+  },
+
+  {
+    title: 'Wie triffst du am liebsten Entscheidungen?',
+    options: [
+      'Ich höre auf mein Bauchgefühl bzw. meinen Körper',
+      'Ich wäge ab und setze mir klare Kriterien',
+      'Ich lass mir Zeit, bis sich alles richtig anfühlt',
+      'Ich hole mir eine zweite Meinung von Menschen, denen ich vertraue',
+      'Ich probiere aus und passe unterwegs an'
+    ]
+  },
+
+  {
+    title: 'Was würdest du an einem komplett freien Sonntag am liebsten tun?',
+    options: [
+      'Einen langen Spaziergang machen und gut kochen',
+      'Etwas erledigen, das mich meinem Ziel näherbringt',
+      'Einfach nichts müssen und entspannen',
+      'Zeit mit Familie oder Freunden verbringen',
+      'Etwas Neues ausprobieren, das ich noch nicht kannte'
+    ]
+  },
+
+  {
+    title: 'Welcher Satz beschreibt dich gerade am ehesten?',
+    options: [
+      '„Ich will mich einfach gut fühlen.“',
+      '„Ich will das Beste aus mir rausholen.“',
+      '„Ich brauche weniger Chaos in meinem Kopf.“',
+      '„Ich bin stärker, wenn ich nicht allein bin.“',
+      '„Ich will wissen, wozu ich eigentlich fähig bin.“'
+    ]
+  }
+
+];
+
+
+/* =========================================================
+   QUALIFYING QUESTIONS
+   ========================================================= */
+
+const QUALIFYING_QUESTIONS = [
+
+  {
+    title: 'Wie lange beschäftigst du dich schon bewusst mit deiner Gesundheit?',
+    options: [
+      'Ich fange gerade erst an',
+      'Seit ein paar Monaten',
+      'Seit über einem Jahr',
+      'Schon seit vielen Jahren'
+    ]
+  },
+
+  {
+    title: 'Wie wichtig ist dir persönlich das Thema gesunde Ernährung aktuell?',
+    options: [
+      'Eher unwichtig, ich lebe wie ich will',
+      'Interessiert mich, aber keine Priorität',
+      'Sehr wichtig, ich achte bewusst darauf',
+      'Absolute Priorität in meinem Leben'
+    ]
+  },
+
+  {
+    title: 'Nutzt du aktuell Nahrungsergänzung oder Vitamine?',
+    options: [
+      'Nein, noch nie',
+      'Gelegentlich mal etwas ausprobiert',
+      'Ja, regelmäßig',
+      'Ja, fester Bestandteil meiner Routine'
+    ]
+  },
+
+  {
+    title: 'Wenn du merkst, dass dir etwas wirklich hilft – wie gehst du damit um?',
+    options: [
+      'Ich bleibe eher skeptisch, auch wenn es hilft',
+      'Ich probiere es erstmal weiter aus',
+      'Ich investiere gerne, wenn ich einen Unterschied spüre',
+      'Ich hole mir sofort mehr davon'
+    ]
+  },
+
+  {
+    title: 'Wie viel gibst du aktuell pro Monat für Nahrungsergänzung oder Vitamine aus?',
+    options: [
+      '0 €',
+      'Bis 30 € (ca. 1 € am Tag)',
+      '30–50 € (ca. 1–1,70 € am Tag)',
+      '50–100 € (ca. 1,70–3,30 € am Tag)',
+      'Über 100 €'
+    ]
+  },
+
+  {
+    title: 'Hast du schon einmal an einer Gruppen-Challenge oder einem Coaching-Programm teilgenommen?',
+    options: [
+      'Nein, noch nie',
+      'Einmal ausprobiert',
+      'Schon mehrmals',
+      'Ich bin sowas gewohnt'
+    ]
+  },
+
+  {
+    title: 'Wie offen bist du für Empfehlungen anderer, z. B. Produkte, die Freunden geholfen haben?',
+    options: [
+      'Eher skeptisch',
+      'Ich höre es mir zumindest an',
+      'Ich probiere es meistens aus',
+      'Ich vertraue Empfehlungen sehr'
+    ]
+  },
+
+  {
+    title: 'Wie schnell möchtest du idealerweise erste Veränderungen spüren?',
+    options: [
+      'Kein Zeitdruck, es darf sich entwickeln',
+      'Innerhalb einiger Monate',
+      'Innerhalb weniger Wochen',
+      'Am liebsten sofort'
+    ]
+  },
+
+  {
+    title: 'Was hält dich aktuell am meisten davon ab, mehr für deine Gesundheit zu tun?',
+    options: [
+      'Zeit',
+      'Geld',
+      'Fehlendes Wissen, was wirklich hilft',
+      'Fehlende Motivation'
+    ],
+    scored: false
+  },
+
+  {
+    title: 'Wünschst du dir nach deinem Ergebnis noch eine individuelle Empfehlung, wie du am besten weiter vorgehen kannst?',
+    options: [
+      'Ja, gerne',
+      'Vielleicht später',
+      'Nein, mein Ergebnis reicht mir erstmal'
+    ],
+    scored: false
+  }
+
+];
+
+
+const ALL_QUESTIONS = [
+  ...TYPE_QUESTIONS.map((q, i) => ({
+    ...q,
+    kind: 'type',
+    qIndex: i
+  })),
+
+  ...QUALIFYING_QUESTIONS.map((q, i) => ({
+    ...q,
+    kind: 'qual',
+    qIndex: i
+  }))
+];
+
+
+const LEVELS = {
+
+  einsteiger:
+    'Bei deinen Antworten zeigt sich außerdem: Du stehst gerade noch relativ am Anfang, was bewusste Gesundheit angeht – und das ist genau der richtige Moment, um dranzubleiben.',
+
+  unterwegs:
+    'Bei deinen Antworten zeigt sich außerdem: Du hast schon einiges angestoßen und bist mitten in der Entwicklung – mit der richtigen Unterstützung geht’s jetzt noch leichter voran.',
+
+  fortgeschritten:
+    'Bei deinen Antworten zeigt sich außerdem: Du lebst Gesundheit schon sehr bewusst – Zeit, dich mit Gleichgesinnten auszutauschen, die auf deinem Level sind.'
+
+};
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+const scores = {
+  gesundheit: 0,
+  ambition: 0,
+  ruhe: 0,
+  gemeinschaft: 0,
+  optimierer: 0
+};
+
+const qualAnswers = [];
+
+let engagementScore = 0;
+
+
+/* =========================================================
+   BUILD QUESTION SCREENS
+   ========================================================= */
+
+const container = document.getElementById('quiz-questions');
+
+
+ALL_QUESTIONS.forEach((q, idx) => {
+
+  const section = document.createElement('section');
+
+  section.className = 'screen';
+  section.id = 'q' + idx;
+
+  section.innerHTML = `
+    <div class="q-count">
+      Frage ${idx + 1} von ${ALL_QUESTIONS.length}
+    </div>
+
+    <div class="q-title">
+      ${q.title}
+    </div>
+
+    <div class="options">
+      ${q.options
+        .map(
+          (opt, i) => `
+            <button
+              class="option"
+              data-i="${i}"
+              onclick="selectOption(${idx}, ${i}, this)"
+            >
+              ${opt}
+            </button>
+          `
+        )
+        .join('')}
+    </div>
+  `;
+
+  container.appendChild(section);
+
+});
+
+
+/* =========================================================
+   SELECT ANSWER
+   ========================================================= */
+
+function selectOption(qIdx, optIdx, el) {
+
+  const parent = el.parentElement;
+
+  [...parent.children].forEach(c => {
+    c.classList.remove('selected');
+  });
+
+  el.classList.add('selected');
+
+  const q = ALL_QUESTIONS[qIdx];
+
+
+  if (q.kind === 'type') {
+
+    scores[TYPE_KEYS[optIdx]] += 1;
+
+  } else {
+
+    qualAnswers[q.qIndex] = q.options[optIdx];
+
+    if (q.scored !== false) {
+      engagementScore += optIdx + 1;
+    }
+
+  }
+
+
+  setTimeout(() => {
+
+    if (qIdx + 1 < ALL_QUESTIONS.length) {
+
+      goTo('q' + (qIdx + 1));
+
+    } else {
+
+      goTo('screen-form');
+
+    }
+
+  }, 220);
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+function goTo(id) {
+
+  document
+    .querySelectorAll('.screen')
+    .forEach(s => s.classList.remove('active'));
+
+  document
+    .getElementById(id)
+    .classList.add('active');
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+
+
+  const track = document.getElementById('progressTrack');
+  const fill = document.getElementById('progressFill');
+
+
+  if (id.startsWith('q')) {
+
+    track.style.display = 'block';
+
+    const idx = parseInt(id.slice(1), 10);
+
+    fill.style.width =
+      Math.round(
+        ((idx + 1) / ALL_QUESTIONS.length) * 100
+      ) + '%';
+
+  } else if (id === 'screen-form') {
+
+    track.style.display = 'block';
+    fill.style.width = '100%';
+
+  } else {
+
+    track.style.display = 'none';
+
+  }
+
+}
+
+
+/* =========================================================
+   HUBSPOT INTEGRATION
+   ========================================================= */
+
+const HUBSPOT_PORTAL_ID = '149409384';
+
+const HUBSPOT_FORM_GUID =
+  'd9f13ac0-424a-4539-b244-9b6ee3b0eb6f';
+
+
+async function sendToHubSpot(payload) {
+
+  try {
+
+    const response = await fetch(
+      `https://api.hsforms.com/submissions/v3/integration/submit/${HUBSPOT_PORTAL_ID}/${HUBSPOT_FORM_GUID}`,
+      {
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+
+          fields: [
+
+            {
+              name: 'firstname',
+              value: payload.name
+            },
+
+            {
+              name: 'email',
+              value: payload.email
+            },
+
+            {
+              name: 'phone',
+              value: payload.phone
+            },
+
+            {
+              name: 'quiz_typ',
+              value: payload.type
+            },
+
+            {
+              name: 'quiz_level',
+              value: payload.level
+            }
+
+          ],
+
+          context: {
+            pageUri: window.location.href,
+            pageName: document.title
+          }
+
+        })
+      }
+    );
+
+
+    if (!response.ok) {
+
+      console.error(
+        'HubSpot hat den Lead nicht angenommen:',
+        response.status,
+        await response.text()
+      );
+
+      return false;
+    }
+
+
+    console.log(
+      'Lead erfolgreich an HubSpot gesendet.'
+    );
+
+    return true;
+
+
+  } catch (err) {
+
+    console.error(
+      'HubSpot-Übertragung fehlgeschlagen:',
+      err
+    );
+
+    return false;
+  }
+
+}
+
+
+/* =========================================================
+   COMPUTE TYPE
+   ========================================================= */
+
+function computeType() {
+
+  let best = TYPE_KEYS[0];
+
+  TYPE_KEYS.forEach(k => {
+
+    if (scores[k] > scores[best]) {
+      best = k;
+    }
+
+  });
+
+  return best;
+}
+
+
+/* =========================================================
+   COMPUTE LEVEL
+   ========================================================= */
+
+function computeLevel() {
+
+  if (engagementScore <= 16) {
+    return 'einsteiger';
+  }
+
+  if (engagementScore <= 24) {
+    return 'unterwegs';
+  }
+
+  return 'fortgeschritten';
+
+}
+
+
+/* =========================================================
+   FORM SUBMIT
+   ========================================================= */
+
+async function submitForm() {
+
+  const name =
+    document.getElementById('fName').value.trim();
+
+  const email =
+    document.getElementById('fEmail').value.trim();
+
+  const phone =
+    document.getElementById('fPhone').value.trim();
+
+
+  /* Alle drei Angaben sind Pflicht */
+
+  if (!name || !email || !phone) {
+
+    const submitBtn =
+      document.getElementById('submitBtn');
+
+    submitBtn.style.background = '#c1573c';
+
+    setTimeout(() => {
+
+      submitBtn.style.background = '';
+
+    }, 600);
+
+    return;
+  }
+
+
+  const typeKey = computeType();
+
+  const levelKey = computeLevel();
+
+
+  const leadPayload = {
+
+    name,
+    email,
+    phone,
+    type: typeKey,
+    level: levelKey,
+    engagementScore,
+    qualAnswers
+
+  };
+
+
+  console.log(
+    'Lead captured:',
+    leadPayload
+  );
+
+
+  const submitBtn =
+    document.getElementById('submitBtn');
+
+
+  submitBtn.disabled = true;
+
+  submitBtn.textContent =
+    'Einen Moment …';
+
+
+  /* Lead an HubSpot senden */
+
+  const hubspotSuccess =
+    await sendToHubSpot(leadPayload);
+
+
+  /* Falls HubSpot die Daten nicht annimmt */
+
+  if (!hubspotSuccess) {
+
+    submitBtn.disabled = false;
+
+    submitBtn.textContent =
+      'Mein Ergebnis anzeigen';
+
+    alert(
+      'Deine Angaben konnten gerade nicht gespeichert werden. Bitte versuche es noch einmal.'
+    );
+
+    return;
+  }
+
+
+  /* =====================================================
+     RESULT ANZEIGEN
+     ===================================================== */
+
+  const t = TYPES[typeKey];
+
+
+  document.getElementById('resultIcon').textContent =
+    t.icon;
+
+  document.getElementById('resultKicker').textContent =
+    t.kicker;
+
+  document.getElementById('resultTitle').textContent =
+    t.title;
+
+  document.getElementById('resultLine').textContent =
+    t.line;
+
+  document.getElementById('resultBody').textContent =
+    t.body;
+
+  document.getElementById('levelLine').textContent =
+    LEVELS[levelKey];
+
+
+  document.getElementById('resultNote').textContent =
+    `Danke, ${name}! Dein Ergebnis geht auch an ${email}.`;
+
+
+  document
+    .querySelectorAll(
+      '.result-card, .result-kicker'
+    )
+    .forEach(el => {
+
+      el.style.setProperty(
+        '--result-color',
+        t.color
+      );
+
+    });
+
+
+  submitBtn.disabled = false;
+
+  submitBtn.textContent =
+    'Mein Ergebnis anzeigen';
+
+
+  goTo('screen-result');
+
+}
+
+</script>
+
+</body>
+</html>
